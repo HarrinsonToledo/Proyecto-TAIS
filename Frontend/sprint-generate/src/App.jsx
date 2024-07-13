@@ -3,6 +3,8 @@ import XMLValidator from './components/XMLValidator';
 import './App.css'
 
 function App() {
+  const [error, setError] = useState('');
+
   const [springSelect, setSpringSelect] = useState('3.3.2 (SNAPSHOT)');
   const [javaSelect, setJavaSelect] = useState('Java 22');
 
@@ -12,7 +14,7 @@ function App() {
   const [descripcion, setDescripcion] = useState("Proyecto Demo para Sprint Boot")
   const [paquete, setPaquete] = useState(grupo + "." + artefacto)
 
-  const [jsonData, setJsonData] = useState({ key1: 'value1', key2: 'value2' });
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const changeSpringSelect = (event) => {
     setSpringSelect(event.target.value);
@@ -45,11 +47,39 @@ function App() {
   }
 
   const onFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+    const file = event.target.files[0];
+
+    if (file) {
+      if (file.type !== 'text/xml' && file.type !== 'application/xml') {
+        setError('Por favor selecciona un archivo XML.');
+        event.target.value = '';
+        return;
+      }
+      setSelectedFile(file);
+      console.log('Archivo seleccionado:', file);
+    }
   };
 
-  const onFileUpload = () => {
+  const sendFormData = () => {
+    setError('')
     const formData = new FormData();
+    const jsonData = { 
+      spring: springSelect, 
+      java: javaSelect,
+      group: grupo,
+      artifact: artefacto,
+      nameProject: nombre,
+      description: descripcion,
+      namePacke: paquete 
+    }
+
+    console.log(jsonData)
+
+    if(selectedFile == null) {
+      setError('No se subio el archivo XML')
+      return
+    }
+
     formData.append('file', selectedFile);
     formData.append('jsonData', JSON.stringify(jsonData));
 
@@ -183,10 +213,12 @@ function App() {
       </div>
       <div className='xml-data'>
         <p className='titleS'><b>Metamodelo XML</b></p>
-        <input className='file' type="file" onChange={onFileChange} />
-        <button className='btn' onClick={onFileUpload}>
+        <input className='file' accept=".xml" type="file" onChange={onFileChange} />
+        <button className='btn' onClick={sendFormData}>
           Enviar Datos
         </button>
+
+        <p className='errors'><b>{error}</b></p>
       </div>
     </div>
   )

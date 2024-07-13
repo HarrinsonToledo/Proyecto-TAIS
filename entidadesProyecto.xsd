@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="Project">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="LogicPackage">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:choice maxOccurs="unbounded">
+                                <xs:element name="Interface" maxOccurs="unbounded">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="Attributes" maxOccurs="1">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="Attribute"
+                                                            maxOccurs="unbounded">
+                                                            <xs:complexType>
+                                                                <xs:attribute name="name"
+                                                                    type="xs:string"
+                                                                    use="required" />
+                                                                <xs:attribute name="type"
+                                                                    type="xs:string"
+                                                                    use="required" />
+                                                                <xs:attribute name="visibility"
+                                                                    type="xs:string" />
+                                                            </xs:complexType>
+                                                        </xs:element>
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                            <xs:element name="Methods" maxOccurs="1">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="Method"
+                                                            maxOccurs="unbounded">
+                                                            <xs:complexType>
+                                                                <xs:sequence>
+                                                                    <xs:element name="Parameter">
+                                                                        <xs:complexType>
+                                                                            <xs:attribute
+                                                                                name="name"
+                                                                                type="xs:string"
+                                                                                use="required" />
+                                                                            <xs:attribute
+                                                                                name="type"
+                                                                                type="xs:string"
+                                                                                use="required" />
+                                                                        </xs:complexType>
+                                                                    </xs:element>
+                                                                </xs:sequence>
+                                                                <xs:attribute name="name"
+                                                                    type="xs:string"
+                                                                    use="required" />
+                                                                <xs:attribute name="type"
+                                                                    type="xs:string"
+                                                                    use="required" />
+                                                                <xs:attribute name="visibility"
+                                                                    type="xs:string" use="required" />
+                                                            </xs:complexType>
+                                                        </xs:element>
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                        </xs:sequence>
+                                        <xs:attribute name="name" type="xs:string" use="required" />
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="Class" maxOccurs="unbounded">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="Attributes" maxOccurs="1">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="Attribute"
+                                                            maxOccurs="unbounded">
+                                                            <xs:complexType>
+                                                                <xs:attribute name="name"
+                                                                    type="xs:string"
+                                                                    use="required" />
+                                                                <xs:attribute name="type"
+                                                                    type="xs:string"
+                                                                    use="required" />
+                                                                <xs:attribute name="visibility"
+                                                                    type="xs:string" />
+                                                            </xs:complexType>
+                                                        </xs:element>
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                            <xs:element name="Methods" maxOccurs="1">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="Method"
+                                                            maxOccurs="unbounded">
+                                                            <xs:complexType>
+                                                                <xs:sequence>
+                                                                    <xs:element name="Parameter">
+                                                                        <xs:complexType>
+                                                                            <xs:attribute
+                                                                                name="name"
+                                                                                type="xs:string"
+                                                                                use="required" />
+                                                                            <xs:attribute
+                                                                                name="type"
+                                                                                type="xs:string"
+                                                                                use="required" />
+                                                                        </xs:complexType>
+                                                                    </xs:element>
+                                                                </xs:sequence>
+                                                                <xs:attribute name="name"
+                                                                    type="xs:string"
+                                                                    use="required" />
+                                                                <xs:attribute name="type"
+                                                                    type="xs:string"
+                                                                    use="required" />
+                                                                <xs:attribute name="visibility"
+                                                                    type="xs:string" use="required" />
+                                                                <xs:attribute name="abstract"
+                                                                    type="xs:string" use="required" />
+                                                            </xs:complexType>
+                                                        </xs:element>
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                            <xs:element name="Extend" maxOccurs="1">
+                                                <xs:complexType>
+                                                    <xs:attribute name="name" type="xs:string"
+                                                        use="required" />
+                                                </xs:complexType>
+                                            </xs:element>
+                                            <xs:element name="Implements" maxOccurs="1">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="Implement"
+                                                            maxOccurs="unbounded">
+                                                            <xs:complexType>
+                                                                <xs:attribute name="name"
+                                                                    type="xs:string"
+                                                                    use="required" />
+                                                            </xs:complexType>
+                                                        </xs:element>
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                        </xs:sequence>
+                                        <xs:attribute name="name" type="xs:string" use="required" />
+                                        <xs:attribute name="abstract" type="xs:string"
+                                            use="required" />
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:choice>
+                        </xs:sequence>
+                        <xs:attribute name="name" type="xs:string" use="required" />
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="RoutesPackage">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:choice maxOccurs="unbounded">
+                                <xs:element name="Route" maxOccurs="unbounded">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="Attributes" maxOccurs="1">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="Attribute"
+                                                            maxOccurs="unbounded">
+                                                            <xs:complexType>
+                                                                <xs:attribute name="name"
+                                                                    type="xs:string"
+                                                                    use="required" />
+                                                                <xs:attribute name="type"
+                                                                    type="xs:string"
+                                                                    use="required" />
+                                                                <xs:attribute name="visibility"
+                                                                    type="xs:string" />
+                                                            </xs:complexType>
+                                                        </xs:element>
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                            <xs:element name="Methods" maxOccurs="1">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="Method"
+                                                            maxOccurs="unbounded">
+                                                            <xs:complexType>
+                                                                <xs:sequence>
+                                                                    <xs:element name="Parameter">
+                                                                        <xs:complexType>
+                                                                            <xs:attribute
+                                                                                name="name"
+                                                                                type="xs:string"
+                                                                                use="required" />
+                                                                            <xs:attribute
+                                                                                name="type"
+                                                                                type="xs:string"
+                                                                                use="required" />
+                                                                        </xs:complexType>
+                                                                    </xs:element>
+                                                                </xs:sequence>
+                                                                <xs:attribute name="path"
+                                                                    type="xs:string"
+                                                                    use="required" />
+                                                                <xs:attribute name="typeHttp"
+                                                                    type="xs:string"
+                                                                    use="required" />
+                                                                <xs:attribute
+                                                                    name="typeResponse"
+                                                                    type="xs:string"
+                                                                    use="required" />
+                                                            </xs:complexType>
+                                                        </xs:element>
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                            <xs:element name="Extend" maxOccurs="1">
+                                                <xs:complexType>
+                                                    <xs:attribute name="name" type="xs:string"
+                                                        use="required" />
+                                                </xs:complexType>
+                                            </xs:element>
+                                            <xs:element name="Implements" maxOccurs="1">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="Implement"
+                                                            maxOccurs="unbounded">
+                                                            <xs:complexType>
+                                                                <xs:attribute name="name"
+                                                                    type="xs:string"
+                                                                    use="required" />
+                                                            </xs:complexType>
+                                                        </xs:element>
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                        </xs:sequence>
+                                        <xs:attribute name="name" type="xs:string" use="required" />
+                                        <xs:attribute name="abstract" type="xs:string"
+                                            use="required" />
+                                        <xs:attribute name="idObject" type="xs:int" use="required" />
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:choice>
+                        </xs:sequence>
+                        <xs:attribute name="name" type="xs:string" use="required" />
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="required"></xs:attribute>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

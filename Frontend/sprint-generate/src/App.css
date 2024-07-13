@@ -148,3 +148,11 @@
   border-right: 0px;
   border-color: #209610;
 }
+
+.xml-data {
+  text-align: left;
+  padding-left: 50px;
+  padding-right: 50px;
+  margin-bottom: 20px;
+  font-size: large;
+}

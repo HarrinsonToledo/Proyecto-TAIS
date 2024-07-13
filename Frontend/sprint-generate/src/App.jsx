@@ -53,7 +53,7 @@ function App() {
     formData.append('file', selectedFile);
     formData.append('jsonData', JSON.stringify(jsonData));
 
-    fetch('URL_DE_TU_BACKEND', {
+    fetch('http://localhost:8080', {
       method: 'POST',
       body: formData,
     })
@@ -183,9 +183,9 @@ function App() {
       </div>
       <div className='xml-data'>
         <p className='titleS'><b>Metamodelo XML</b></p>
-        <input type="file" onChange={onFileChange} />
-        <button onClick={onFileUpload}>
-          Subir Archivo
+        <input className='file' type="file" onChange={onFileChange} />
+        <button className='btn' onClick={onFileUpload}>
+          Enviar Datos
         </button>
       </div>
     </div>

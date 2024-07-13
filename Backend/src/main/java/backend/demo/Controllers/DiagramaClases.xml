@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Package name="Diagrama de Clases" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="clasifiedDgClases.xsd">
+	<Interface name="Vehiculos" idObject="0">
+		<Attributes>
+			<Attribute name="Matricula" type="String" visibility="private"/>
+		</Attributes>
+		<Methods>
+			<Method name="Conducir" type="void" visibility="public">
+				<Parameter name="Velocidad" type="int"/>
+			</Method>
+		</Methods>
+		<Relations>
+			<Relation type="Realizacion" idNextPoint="1" direction="1"></Relation>
+			<Relation type="Realizacion" idNextPoint="2" direction="1"></Relation>
+			<Relation type="Realizacion" idNextPoint="3" direction="1"></Relation>
+		</Relations>
+	</Interface>
+	<Class name="Carro" abstract="0" idObject="1">
+		<Attributes>
+			<Attribute name="Motor" type="String" visibility="private"/>
+		</Attributes>
+		<Methods>
+			<Method name="Conducir" type="void" visibility="public" abstract="0">
+				<Parameter name="Velocidad" type="int"/>
+			</Method>
+			<Method name="Frenar" type="void" visibility="public" abstract="0">
+				<Parameter name="Velocidad" type="int"/>
+			</Method>
+		</Methods>
+		<Relations>
+			<Relation type="Realizacion" idNextPoint="0" direction="0"></Relation>
+		</Relations>
+		<Extend name="None"/>
+		<Implements>
+			<Implement name="None"/>
+		</Implements>
+	</Class>
+	<Class name="Moto" abstract="0" idObject="2">
+		<Attributes>
+			<Attribute name="Motor" type="String" visibility="private"/>
+			<Attribute name="Llantas" type="String" visibility="private"/>
+		</Attributes>
+		<Methods>
+			<Method name="Conducir" type="void" visibility="public" abstract="0">
+				<Parameter name="Velocidad" type="int"/>
+			</Method>
+			<Method name="EncenderLuces" type="void" visibility="public" abstract="0">
+				<Parameter name="None" type="None"/>
+			</Method>
+		</Methods>
+		<Relations>
+			<Relation type="Realizacion" idNextPoint="0" direction="0"></Relation>
+		</Relations>
+		<Extend name="None"/>
+		<Implements>
+			<Implement name="None"/>
+		</Implements>
+	</Class>
+	<Class name="Buseta" abstract="0" idObject="3">
+		<Attributes>
+			<Attribute name="Motor" type="String" visibility="private"/>
+			<Attribute name="Puestos" type="int" visibility="private"/>
+		</Attributes>
+		<Methods>
+			<Method name="Conducir" type="void" visibility="public" abstract="0">
+				<Parameter name="Velocidad" type="int"/>
+			</Method>
+			<Method name="Subir" type="void" visibility="public" abstract="0">
+				<Parameter name="Personas" type="int"/>
+			</Method>
+		</Methods>
+		<Relations>
+			<Relation type="Realizacion" idNextPoint="0" direction="0"></Relation>
+		</Relations>
+		<Extend name="None"/>
+		<Implements>
+			<Implement name="None"/>
+		</Implements>
+	</Class>
+</Package>

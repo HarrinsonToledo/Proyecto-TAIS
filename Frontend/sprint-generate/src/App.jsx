@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import XMLValidator from './components/XMLValidator';
-import './App.css'
+import { useState } from 'react';
+import axios from 'axios';
+import './App.css';
 
 function App() {
   const [error, setError] = useState('');
@@ -8,11 +8,11 @@ function App() {
   const [springSelect, setSpringSelect] = useState('3.3.2 (SNAPSHOT)');
   const [javaSelect, setJavaSelect] = useState('Java 22');
 
-  const [grupo, setGrupo] = useState("com.example")
-  const [artefacto, setArtefacto] = useState("demo")
-  const [nombre, setNombre] = useState("demo")
-  const [descripcion, setDescripcion] = useState("Proyecto Demo para Sprint Boot")
-  const [paquete, setPaquete] = useState(grupo + "." + artefacto)
+  const [grupo, setGrupo] = useState("com.example");
+  const [artefacto, setArtefacto] = useState("demo");
+  const [nombre, setNombre] = useState("demo");
+  const [descripcion, setDescripcion] = useState("Proyecto Demo para Sprint Boot");
+  const [paquete, setPaquete] = useState(grupo + "." + artefacto);
 
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -25,26 +25,26 @@ function App() {
   };
 
   const InputGrupoChange = (event) => {
-    setGrupo(event.target.value)
-    setPaquete(event.target.value + "." + artefacto)
-  }
+    setGrupo(event.target.value);
+    setPaquete(event.target.value + "." + artefacto);
+  };
 
   const InputArtefactoChange = (event) => {
-    setArtefacto(event.target.value)
-    setPaquete(grupo + "." + event.target.value)
-  }
+    setArtefacto(event.target.value);
+    setPaquete(grupo + "." + event.target.value);
+  };
 
   const InputNombreChange = (event) => {
-    setNombre(event.target.value)
-  }
+    setNombre(event.target.value);
+  };
 
   const InputDescripcionChange = (event) => {
-    setDescripcion(event.target.value)
-  }
+    setDescripcion(event.target.value);
+  };
 
   const InputPaqueteChange = (event) => {
-    setPaquete(event.target.value)
-  }
+    setPaquete(event.target.value);
+  };
 
   const onFileChange = (event) => {
     const file = event.target.files[0];
@@ -61,39 +61,41 @@ function App() {
   };
 
   const sendFormData = () => {
-    setError('')
+    setError('');
     const formData = new FormData();
-    const jsonData = { 
-      spring: springSelect, 
+    const jsonData = {
+      spring: springSelect,
       java: javaSelect,
       group: grupo,
       artifact: artefacto,
       nameProject: nombre,
       description: descripcion,
-      namePacke: paquete 
+      namePacke: paquete
+    };
+
+    console.log(jsonData);
+
+    if (selectedFile == null) {
+      setError('No se subio el archivo XML');
+      return;
     }
 
-    console.log(jsonData)
-
-    if(selectedFile == null) {
-      setError('No se subio el archivo XML')
-      return
-    }
-
-    formData.append('file', selectedFile);
+    formData.append('xml', selectedFile);
     formData.append('jsonData', JSON.stringify(jsonData));
 
-    fetch('http://localhost:8080', {
-      method: 'POST',
-      body: formData,
+    axios.post('http://localhost:8080/xml/validar', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Respuesta del servidor:', data);
-      })
-      .catch(error => {
-        console.error('Hubo un error al subir el archivo:', error);
-      });
+    .then(response => {
+      setError(response.data);
+      console.log('Respuesta del servidor:', response.data);
+    })
+    .catch(error => {
+      setError('Hubo un error al subir el archivo: ' + error.message);
+      console.error('Hubo un error al subir el archivo:', error);
+    });
   };
 
   return (
@@ -221,7 +223,7 @@ function App() {
         <p className='errors'><b>{error}</b></p>
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

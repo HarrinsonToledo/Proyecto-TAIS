@@ -13,6 +13,7 @@ import javax.xml.validation.Validator;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
@@ -22,7 +23,7 @@ import org.xml.sax.SAXException;
 public class XMLController {
 
     @PostMapping("/validar")
-    String validar(@RequestParam("xml") MultipartFile xml) throws IOException, SAXException {
+    String validar(@RequestParam("xml") MultipartFile xml, @RequestPart("jsonData") String jsonData) throws IOException, SAXException {
 
         Source source = new StreamSource(xml.getInputStream());
         File xsdFile = new File("Backend\\src\\main\\java\\backend\\demo\\Controllers\\entidadesProyecto.xsd");

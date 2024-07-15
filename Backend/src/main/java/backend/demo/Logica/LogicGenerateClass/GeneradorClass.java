@@ -1,4 +1,4 @@
-package backend.demo.Controllers;
+package backend.demo.Logica.LogicGenerateClass;
 
 import org.w3c.dom.*;
 import javax.xml.parsers.*;

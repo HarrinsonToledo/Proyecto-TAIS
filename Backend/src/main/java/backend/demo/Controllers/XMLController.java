@@ -33,6 +33,5 @@ public class XMLController {
         Validator validator = schema.newValidator();
         validator.validate(source);
         return "XML valido";
-
     }
 }

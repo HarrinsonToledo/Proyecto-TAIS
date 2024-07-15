@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import axios from 'axios';
 import './App.css';
 
 function App() {
@@ -72,6 +73,8 @@ function App() {
       namePacke: paquete
     };
 
+    console.log(jsonData);
+
     if (selectedFile == null) {
       setError('No se subio el archivo XML');
       return;
@@ -80,13 +83,14 @@ function App() {
     formData.append('xml', selectedFile);
     formData.append('jsonData', JSON.stringify(jsonData));
 
-    fetch('http://localhost:8080/xml/validar', {
-      method: 'POST',
-      body: formData,
+    axios.post('http://localhost:8080/xml/validar', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     })
     .then(response => {
       setError(response.data);
-      console.log('Respuesta del servidor:', response);
+      console.log('Respuesta del servidor:', response.data);
     })
     .catch(error => {
       setError('Hubo un error al subir el archivo: ' + error.message);

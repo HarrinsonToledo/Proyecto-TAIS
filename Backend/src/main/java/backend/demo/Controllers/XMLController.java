@@ -49,15 +49,15 @@ public class XMLController {
                     new InputStreamReader(xml.getInputStream(), StandardCharsets.UTF_8))
                     .lines().collect(Collectors.joining("\n"));
 
-            // GenerateProject(xmlContent);
-            return GenerateProject(xmlContent);
+            GenerateProject(xmlContent);
+            return "Proceso Exitoso!!";
         } catch (SAXException e) {
             return "Error de validación XML: " + e.getMessage();
         }
 
     }
 
-    public String GenerateProject(String xmlContent) {
+    public void GenerateProject(String xmlContent) {
         ProcessTextXML PXML = ProcessTextXML.getInstance();
         PXML.processXML(xmlContent);
 
@@ -73,7 +73,5 @@ public class XMLController {
             GR.setOutputDirectory("src/main/java/backend/demo/Controllers/Logica/LogicGenerateRoute/");
             GR.Generar(PXML.getTextRoute());
         }
-
-        return PXML.getTextClass().get(0);
     }
 }

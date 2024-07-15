@@ -46,8 +46,8 @@ public class XMLController {
             validator.validate(source);
 
             String xmlContent = new BufferedReader(
-            new InputStreamReader(xml.getInputStream(), StandardCharsets.UTF_8))
-            .lines().collect(Collectors.joining("\n"));
+                    new InputStreamReader(xml.getInputStream(), StandardCharsets.UTF_8))
+                    .lines().collect(Collectors.joining("\n"));
 
             GenerateProject(xmlContent);
 
@@ -55,22 +55,23 @@ public class XMLController {
         } catch (SAXException e) {
             return "Error de validación XML: " + e.getMessage();
         }
-         
+
     }
 
     public void GenerateProject(String xmlContent) {
         ProcessTextXML PXML = ProcessTextXML.getInstance();
         PXML.processXML(xmlContent);
 
-        if(PXML.getTextClass().size() > 0) {
-            
+        if (PXML.getTextClass().size() > 0) {
+
         }
-        if(PXML.getTextInterface().size() > 0) {
+        if (PXML.getTextInterface().size() > 0) {
             GeneradorInterface GI = GeneradorInterface.getInstance();
             GI.Generar(PXML.getTextInterface());
         }
-        if(PXML.getTextRoute().size() > 0) {
+        if (PXML.getTextRoute().size() > 0) {
             GeneradorRoute GR = GeneradorRoute.getInstance();
+            GR.setOutputDirectory("src/main/java/backend/demo/Controllers/Logica/LogicGenerateRoute/");
             GR.Generar(PXML.getTextRoute());
         }
     }

@@ -1,7 +1,11 @@
 package backend.demo.Controllers;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
@@ -18,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
+
+import backend.demo.Logica.ProcesarTexto.ProcessTextXML;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
@@ -37,16 +43,23 @@ public class XMLController {
             Validator validator = schema.newValidator();
             validator.validate(source);
 
-            return "XML valido";
+            String xmlContent = new BufferedReader(
+            new InputStreamReader(xml.getInputStream(), StandardCharsets.UTF_8))
+            .lines().collect(Collectors.joining("\n"));
+
+            return xmlContent;
+
+            //GenerateProject(xmlContent);
+
+            //return "Proceso exitoso!!";
         } catch (SAXException e) {
             return "Error de validación XML: " + e.getMessage();
         }
+         
+    }
 
-        /*
-         * String xmlContent = new BufferedReader(
-         * new InputStreamReader(xmlFile.getInputStream(), StandardCharsets.UTF_8))
-         * .lines()
-         * .collect(Collectors.joining("\n"));
-         */
+    public void GenerateProject(String xmlContent) {
+            ProcessTextXML PXML = ProcessTextXML.getInstance();
+            PXML.processXML(xmlContent);
     }
 }

@@ -33,5 +33,12 @@ public class XMLController {
         Validator validator = schema.newValidator();
         validator.validate(source);
         return "XML valido";
+
+        /*
+         * String xmlContent = new BufferedReader(
+            new InputStreamReader(xmlFile.getInputStream(), StandardCharsets.UTF_8))
+            .lines()
+            .collect(Collectors.joining("\n"));
+         */
     }
 }

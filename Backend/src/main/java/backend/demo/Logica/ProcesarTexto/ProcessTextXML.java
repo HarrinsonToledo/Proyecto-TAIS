@@ -1,28 +1,48 @@
 package backend.demo.Logica.ProcesarTexto;
 
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class ProcessTextXML {
     private static ProcessTextXML instance;
-    private String textClass;
-    private String textInterface;
-    private String textRoute;
+    private ArrayList<String> textClass;
+    private ArrayList<String> textInterface;
+    private ArrayList<String> textRoute;
 
     public ProcessTextXML() {
 
     }
 
-    public void processXML() {
-        
+    public ArrayList<String> extractText(String text, String separate) {
+        ArrayList<String> textSeparate = new ArrayList<>();
+
+        String regex = separate;
+        Pattern pattern = Pattern.compile(regex, Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(text);
+
+        while (matcher.find()) {
+            textSeparate.add(matcher.group());
+        }
+
+        return textSeparate;
     }
 
-    public String getTextClass() {
+    public void processXML(String XML) {
+        textClass = extractText(XML, "<Class>(.*?)</Class>");
+        textInterface = extractText(XML, "<Interface>(.*?)</Interface>");
+        textRoute = extractText(XML, "<Route>(.*?)</Route>");
+    }
+
+    public ArrayList<String> getTextClass() {
         return textClass;
     }
 
-    public String getTextInterface() {
+    public ArrayList<String> getTextInterface() {
         return textInterface;
     }
 
-    public String getTextRoute() {
+    public ArrayList<String> getTextRoute() {
         return textRoute;
     }
 

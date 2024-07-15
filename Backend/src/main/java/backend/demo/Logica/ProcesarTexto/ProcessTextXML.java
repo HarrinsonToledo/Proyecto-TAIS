@@ -29,9 +29,9 @@ public class ProcessTextXML {
     }
 
     public void processXML(String XML) {
-        textClass = extractText(XML, "<Class>(.*?)</Class>");
-        textInterface = extractText(XML, "<Interface>(.*?)</Interface>");
-        textRoute = extractText(XML, "<Route>(.*?)</Route>");
+        textClass = extractText(XML, "<Class(.*?)</Class>");
+        textInterface = extractText(XML, "<Interface(.*?)</Interface>");
+        textRoute = extractText(XML, "<Route(.*?)</Route>");
     }
 
     public ArrayList<String> getTextClass() {
@@ -47,7 +47,7 @@ public class ProcessTextXML {
     }
 
     public static ProcessTextXML getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new ProcessTextXML();
         }
         return instance;

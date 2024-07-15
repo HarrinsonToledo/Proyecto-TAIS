@@ -1,9 +1,11 @@
 package backend.demo.Logica.LogicGenerateRoute;
 
+import java.util.ArrayList;
+
 public class GeneradorRoute {
     private static GeneradorRoute instance;
 
-    public void Generar() {
+    public void Generar(ArrayList<String> lista) {
 
     }
 

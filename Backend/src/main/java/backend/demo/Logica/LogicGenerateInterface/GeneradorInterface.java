@@ -1,9 +1,11 @@
 package backend.demo.Logica.LogicGenerateInterface;
 
+import java.util.ArrayList;
+
 public class GeneradorInterface {
     private static GeneradorInterface instance;
 
-    public void Generar() {
+    public void Generar(ArrayList<String> lista) {
 
     }
 

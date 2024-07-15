@@ -69,11 +69,11 @@ public class XMLController {
         }
         if(PXML.getTextInterface().size() > 0) {
             GeneradorInterface GI = GeneradorInterface.getInstance();
-            GI.Generar();
+            GI.Generar(PXML.getTextInterface());
         }
         if(PXML.getTextRoute().size() > 0) {
             GeneradorRoute GR = GeneradorRoute.getInstance();
-            GR.Generar();
+            GR.Generar(PXML.getTextRoute());
         }
     }
 }

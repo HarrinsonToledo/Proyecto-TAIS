@@ -11,7 +11,7 @@ public class GeneradorRoute {
     private String outputDirectory;
 
     public GeneradorRoute() {
-        this.outputDirectory = "src/main/java/generated/"; // Default directory
+        this.outputDirectory = "src/main/java/backend/demo/Controllers/Logica/LogicGenerateRoute/"; // Default directory
         createOutputDirectory();
     }
 

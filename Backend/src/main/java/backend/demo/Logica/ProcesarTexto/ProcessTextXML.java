@@ -31,7 +31,7 @@ public class ProcessTextXML {
     public void processXML(String XML) {
         textClass = extractText(XML, "<Class(.*?)</Class>");
         textInterface = extractText(XML, "<Interface(.*?)</Interface>");
-        textRoute = extractText(XML, "<Route(.*?)</Route>");
+        textRoute = extractText(XML, "<Route (.*?)</Route>");
     }
 
     public ArrayList<String> getTextClass() {

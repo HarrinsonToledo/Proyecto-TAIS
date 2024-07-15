@@ -2,11 +2,18 @@ package backend.demo.Logica.LogicGenerateInterface;
 
 import java.util.ArrayList;
 
+import backend.demo.Logica.ProcesarTexto.ProcessTextXML;
+
 public class GeneradorInterface {
     private static GeneradorInterface instance;
+    private ProcessTextXML XML;
+
+    public GeneradorInterface() {
+        XML = ProcessTextXML.getInstance();
+    }
 
     public void Generar(ArrayList<String> lista) {
-
+        System.out.println(lista.get(0));
     }
 
     public static GeneradorInterface getInstance() {

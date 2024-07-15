@@ -49,11 +49,9 @@ public class XMLController {
             new InputStreamReader(xml.getInputStream(), StandardCharsets.UTF_8))
             .lines().collect(Collectors.joining("\n"));
 
-            return xmlContent;
+            GenerateProject(xmlContent);
 
-            //GenerateProject(xmlContent);
-
-            //return "Proceso exitoso!!";
+            return "Proceso exitoso!!";
         } catch (SAXException e) {
             return "Error de validación XML: " + e.getMessage();
         }

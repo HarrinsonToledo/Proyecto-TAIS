@@ -70,7 +70,7 @@ public class XMLController {
         }
         if (PXML.getTextRoute().size() > 0) {
             GeneradorRoute GR = GeneradorRoute.getInstance();
-            GR.setOutputDirectory("src/main/java/backend/demo/Controllers/Logica/LogicGenerateRoute/");
+            GR.setOutputDirectory("Backend/src/main/java/backend/demo/Logica/LogicGenerateRoute/");
             System.out.println(PXML.getTextRoute());
             GR.Generar(PXML.getTextRoute());
         }

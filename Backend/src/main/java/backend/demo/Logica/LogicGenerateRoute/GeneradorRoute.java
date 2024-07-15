@@ -5,13 +5,17 @@ import javax.xml.parsers.*;
 import java.io.*;
 import java.nio.file.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GeneradorRoute {
     private static GeneradorRoute instance;
     private String outputDirectory;
+    private static final Logger LOGGER = Logger.getLogger(GeneradorRoute.class.getName());
 
     public GeneradorRoute() {
-        this.outputDirectory = "src/main/java/backend/demo/Controllers/Logica/LogicGenerateRoute/"; // Default directory
+        this.outputDirectory = "Backend/src/main/java/backend/demo/Logica/LogicGenerateRoute/"; // Default
+                                                                                                // directory
         createOutputDirectory();
     }
 
@@ -23,7 +27,14 @@ public class GeneradorRoute {
     private void createOutputDirectory() {
         File directory = new File(outputDirectory);
         if (!directory.exists()) {
-            directory.mkdirs();
+            boolean created = directory.mkdirs();
+            if (created) {
+                LOGGER.info("Output directory created: " + outputDirectory);
+            } else {
+                LOGGER.severe("Failed to create output directory: " + outputDirectory);
+            }
+        } else {
+            LOGGER.info("Output directory already exists: " + outputDirectory);
         }
     }
 
@@ -32,13 +43,15 @@ public class GeneradorRoute {
             try {
                 processRoute(routeXML);
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Error processing route XML: " + routeXML, e);
             }
         }
     }
 
     private void processRoute(String routeXML) throws Exception {
-        // Parse the route XML content
+        LOGGER.info("Processing route XML: " + routeXML);
+
+        // Parse the XML content of the route
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(new ByteArrayInputStream(routeXML.getBytes()));
@@ -88,16 +101,25 @@ public class GeneradorRoute {
             methodsBuilder.append("}\n");
         }
 
-        // Generate Java class content
+        // Generate the content of the Java class
         String classContent = generateJavaClassContent(routeName, attributesBuilder.toString(),
                 methodsBuilder.toString());
 
-        // Write Java class to file
+        // Write the Java class to a file
         writeJavaFile(routeName, classContent);
     }
 
     private String generateJavaClassContent(String className, String attributes, String methods) {
-        return "@CrossOrigin(origins = \"http://localhost:5173\")\n" +
+        String imports = "import java.util.ArrayList;\n" +
+                "import java.util.HashMap;\n" +
+                "import java.util.List;\n" +
+                "import java.util.Map;\n" +
+                "import org.apache.catalina.connector.Response;\n" +
+                "import org.springframework.http.ResponseEntity;\n" +
+                "import org.springframework.web.bind.annotation.*;\n";
+
+        return imports +
+                "\n@CrossOrigin(origins = \"http://localhost:5173\")\n" +
                 "@RestController\n" +
                 "public class " + className + " {\n\n" +
                 attributes + "\n" +
@@ -105,10 +127,15 @@ public class GeneradorRoute {
                 "}\n";
     }
 
-    private void writeJavaFile(String className, String classContent) throws IOException {
+    private void writeJavaFile(String className, String classContent) {
         Path path = Paths.get(outputDirectory + className + ".java");
-        System.out.println(path);
-        Files.write(path, classContent.getBytes());
+        try {
+            LOGGER.info("Writing file: " + path.toAbsolutePath());
+            Files.write(path, classContent.getBytes());
+            LOGGER.info("File written successfully: " + path.toAbsolutePath());
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Failed to write file: " + path.toAbsolutePath(), e);
+        }
     }
 
     public static GeneradorRoute getInstance() {

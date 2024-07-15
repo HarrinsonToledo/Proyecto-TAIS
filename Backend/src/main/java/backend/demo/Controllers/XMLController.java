@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
 
+import backend.demo.Logica.LogicGenerateInterface.GeneradorInterface;
+import backend.demo.Logica.LogicGenerateRoute.GeneradorRoute;
 import backend.demo.Logica.ProcesarTexto.ProcessTextXML;
 
 @RestController
@@ -59,7 +61,19 @@ public class XMLController {
     }
 
     public void GenerateProject(String xmlContent) {
-            ProcessTextXML PXML = ProcessTextXML.getInstance();
-            PXML.processXML(xmlContent);
+        ProcessTextXML PXML = ProcessTextXML.getInstance();
+        PXML.processXML(xmlContent);
+
+        if(PXML.getTextClass().size() > 0) {
+            
+        }
+        if(PXML.getTextInterface().size() > 0) {
+            GeneradorInterface GI = GeneradorInterface.getInstance();
+            GI.Generar();
+        }
+        if(PXML.getTextRoute().size() > 0) {
+            GeneradorRoute GR = GeneradorRoute.getInstance();
+            GR.Generar();
+        }
     }
 }

@@ -31,5 +31,4 @@ public class GeneradorController {
             return ResponseEntity.status(400).body(Map.of("message", e.getCause().getMessage()));
         }
     }
-
 }

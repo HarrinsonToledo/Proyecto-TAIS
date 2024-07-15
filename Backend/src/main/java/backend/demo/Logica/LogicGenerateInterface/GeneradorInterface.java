@@ -13,11 +13,10 @@ public class GeneradorInterface {
     }
 
     public void Generar(ArrayList<String> lista) {
-        System.out.println(lista.get(0));
     }
 
     public static GeneradorInterface getInstance() {
-        if(instance == null){
+        if (instance == null) {
             instance = new GeneradorInterface();
         }
         return instance;

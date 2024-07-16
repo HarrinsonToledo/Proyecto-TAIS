@@ -54,20 +54,20 @@ public class GeneradorClass {
     }
 
     public String start(String classs) {
-        String className = XML.extractTextSingle(classs, "<Class name=\"(.*?)\"").get(0);
+        String className = XML.extractTextSingle(classs, "<Class name='(.*?)'").get(0);
         StringBuilder txt = new StringBuilder("public class ").append(className);
 
         // Check for extend
-        String extend = XML.extractTextSingle(classs, "<Extend name=\"(.*?)\"").get(0);
+        String extend = XML.extractTextSingle(classs, "<Extend name='(.*?)'").get(0);
         if (!"None".equals(extend)) {
             txt.append(" extends ").append(extend);
         }
 
         // Check for implements
-        ArrayList<String> implementsList = XML.extractText(classs, "<Implement name=\"(.*?)\"");
+        ArrayList<String> implementsList = XML.extractText(classs, "<Implement name='(.*?)'");
 
         if (implementsList.size() > 0) {
-            String implement = XML.extractTextSingle(classs, "<Implement name=\"(.*?)\"").get(0);
+            String implement = XML.extractTextSingle(classs, "<Implement name='(.*?)'").get(0);
             if (!"None".equals(implement)) {
                 txt.append(" implements ").append(implement);
             }
@@ -83,9 +83,9 @@ public class GeneradorClass {
 
         if (att.size() != 0) {
             for (String x : att) {
-                txt.append("\t").append(XML.extractTextSingle(x, "visibility=\"(.*?)\"").get(0)).append(" ");
-                txt.append(XML.extractTextSingle(x, "type=\"(.*?)\"").get(0)).append(" ");
-                txt.append(XML.extractTextSingle(x, "name=\"(.*?)\"").get(0)).append(";\n");
+                txt.append("\t").append(XML.extractTextSingle(x, "visibility='(.*?)'").get(0)).append(" ");
+                txt.append(XML.extractTextSingle(x, "type='(.*?)'").get(0)).append(" ");
+                txt.append(XML.extractTextSingle(x, "name='(.*?)'").get(0)).append(";\n");
             }
         }
         return txt.toString();
@@ -99,10 +99,10 @@ public class GeneradorClass {
             for (String y : mth) {
                 String x = XML.extractText(y, "<Method (.*?)>").get(0);
 
-                String visibility = XML.extractTextSingle(x, "visibility=\"(.*?)\"").get(0);
-                String abstractValue = XML.extractTextSingle(x, "abstract=\"(.*?)\"").get(0);
-                String returnType = XML.extractTextSingle(x, "type=\"(.*?)\"").get(0);
-                String methodName = XML.extractTextSingle(x, "name=\"(.*?)\"").get(0);
+                String visibility = XML.extractTextSingle(x, "visibility='(.*?)'").get(0);
+                String abstractValue = XML.extractTextSingle(x, "abstract='(.*?)'").get(0);
+                String returnType = XML.extractTextSingle(x, "type='(.*?)'").get(0);
+                String methodName = XML.extractTextSingle(x, "name='(.*?)'").get(0);
                 String parameters = parameters(y);
 
                 txt.append("\t");
@@ -124,8 +124,8 @@ public class GeneradorClass {
 
         if (prm.size() != 0) {
             for (int i = 0; i < prm.size(); i++) {
-                txt.append(XML.extractTextSingle(prm.get(i), "type=\"(.*?)\"").get(0)).append(" ");
-                txt.append(XML.extractTextSingle(prm.get(i), "name=\"(.*?)\"").get(0));
+                txt.append(XML.extractTextSingle(prm.get(i), "type='(.*?)'").get(0)).append(" ");
+                txt.append(XML.extractTextSingle(prm.get(i), "name='(.*?)'").get(0));
 
                 if (i != prm.size() - 1) {
                     txt.append(", ");
@@ -138,7 +138,7 @@ public class GeneradorClass {
     public void Generar(ArrayList<String> classList, Estructura estructura) {
         for (String x : classList) {
             String content = "package " + estructura.namePacke + ".LogicPackage;\n\n" + start(x) + attributes(x) + methods(x) + "}\n";
-            writeJavaFile(XML.extractTextSingle(x, "<Class name=\"(.*?)\" ").get(0), content);
+            writeJavaFile(XML.extractTextSingle(x, "<Class name='(.*?)' ").get(0), content);
         }
     }
 

@@ -47,7 +47,7 @@ public class GeneradorInterface {
     }
 
     public String start(String inter) {
-        String txt = "public interface " + XML.extractTextSingle(inter, "<Interface name=\"(.*?)\">").get(0) 
+        String txt = "public interface " + XML.extractTextSingle(inter, "<Interface name='(.*?)'>").get(0) 
         
         + "{\n";
 
@@ -61,8 +61,9 @@ public class GeneradorInterface {
 
         if(att.size() != 0) {
             for(String x: att) {
-                txt += "\t" + XML.extractTextSingle(x, "type=\"(.*?)\"").get(0) + " ";
-                txt += XML.extractTextSingle(x, "name=\"(.*?)\"").get(0) + ";\n";
+                txt += "\t" + XML.extractTextSingle(x, "type='(.*?)'").get(0) + " ";
+                txt += XML.extractTextSingle(x, "name='(.*?)'").get(0) + " = ";
+                txt += XML.extractTextSingle(x, "value='(.*?)'").get(0) + ";\n";
             }
         }
 
@@ -77,14 +78,14 @@ public class GeneradorInterface {
         if(mth.size() != 0) {
             for(String y: mth) {
                 String x = XML.extractText(y, "<Method (.*?)>").get(0);
-                txt += "\t" + XML.extractTextSingle(x, "visibility=\"(.*?)\"").get(0) + " ";
-                txt += XML.extractTextSingle(x, "type=\"(.*?)\"").get(0) + " ";
-                txt += XML.extractTextSingle(x, "name=\"(.*?)\"").get(0);
+                txt += "\t" + XML.extractTextSingle(x, "visibility='(.*?)'").get(0) + " ";
+                txt += XML.extractTextSingle(x, "type='(.*?)'").get(0) + " ";
+                txt += XML.extractTextSingle(x, "name='(.*?)'").get(0);
 
                 txt += "(" + paramethers(y) + ")";
-                if(XML.extractTextSingle(x, "abstract=\"(.*?)\"").get(0).equals("1")) {
+                if(XML.extractTextSingle(x, "abstract='(.*?)'").get(0).equals("1")) {
                     txt += ";\n";
-                } else if (XML.extractTextSingle(x, "abstract=\"(.*?)\"").get(0).equals("0")) {
+                } else if (XML.extractTextSingle(x, "abstract='(.*?)'").get(0).equals("0")) {
                     txt += "{\n\n\t}";
                 }
             }
@@ -99,8 +100,8 @@ public class GeneradorInterface {
 
         if(prm.size() != 0) {
             for(int i = 0; i < prm.size(); i++) {
-                txt += XML.extractTextSingle(prm.get(i), "type=\"(.*?)\"").get(0) + " ";
-                txt += XML.extractTextSingle(prm.get(i), "name=\"(.*?)\"").get(0);
+                txt += XML.extractTextSingle(prm.get(i), "type='(.*?)'").get(0) + " ";
+                txt += XML.extractTextSingle(prm.get(i), "name='(.*?)'").get(0);
 
                 if(i != prm.size()-1) {
                     txt += ",";
@@ -115,7 +116,7 @@ public class GeneradorInterface {
         String content = "";
         for(String x: lista) {
             content = "package " + estructura.namePacke + ".LogicPackage;\n\n" + start(x) + atributtes(x) + methods(x) + "\n}";
-            writeJavaFile(XML.extractTextSingle(x, "<Interface name=\"(.*?)\">").get(0), content);
+            writeJavaFile(XML.extractTextSingle(x, "<Interface name='(.*?)'>").get(0), content);
         }
     }
 

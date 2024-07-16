@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<Project name='ProyectoEjemplo'>
+	<LogicPackage>
+		<Interface name='Animal'>
+			<Attributes>
+				<Attribute name='Edad' type='int' value='0'/>
+			</Attributes>
+			<Methods>
+				<Method name='Comer' type='void' visibility='public' abstract='1'>
+					<Parameter name='Cantidad' type='int'/>
+				</Method>
+			</Methods>
+		</Interface>
+		<Interface name='Carro'>
+			<Attributes>
+				<Attribute name='Motor' type='String' value='"Simple"'/>
+				<Attribute name='Puerta' type='String' value='"Corrediza"'/>
+			</Attributes>
+			<Methods>
+				<Method name='Manejar' type='void' visibility='public' abstract='1'>
+					<Parameter name='Distancia' type='int'/>
+					<Parameter name='Velocidad' type='int'/>
+				</Method>
+				<Method name='Frenar' type='void' visibility='public' abstract='1'>
+				</Method>
+			</Methods>
+		</Interface>
+		<Class name='Mamifero' abstract='1'>
+			<Attributes>
+				<Attribute name='Habitad' type='String' visibility='private'/>
+			</Attributes>
+			<Methods>
+				<Method name='Comer' type='void' visibility='public' abstract='1'>
+					<Parameter name='Cantidad' type='int'/>
+				</Method>
+				<Method name='Amamantar' type='void' visibility='public' abstract='0'>
+				</Method>
+			</Methods>
+			<Extend name='None'/>
+			<Implements>
+				<Implement name='Animal'/>
+			</Implements>
+		</Class>
+		<Class name='Perro' abstract='0'>
+			<Attributes>
+				<Attribute name='Raza' type='String' visibility='private'/>
+			</Attributes>
+			<Methods>
+				<Method name='Comer' type='void' visibility='public' abstract='2'>
+					<Parameter name='Cantidad' type='int'/>
+				</Method>
+				<Method name='Amamantar' type='void' visibility='public' abstract='0'>
+				</Method>
+				<Method name='Correr' type='void' visibility='public' abstract='0'>
+					<Parameter name='Velocidad' type='int'/>
+					<Parameter name='Distancia' type='int'/>
+				</Method>
+			</Methods>
+			<Extend name='Mamifero'/>
+			<Implements>
+				<Implement name='None'/>
+			</Implements>
+		</Class>
+	</LogicPackage>
+	<RoutesPackage>
+		<Route name='PersonaController'>
+			<Attributes>
+				<Attribute name='datos' type='String' visibility='private'/>
+			</Attributes>
+			<Methods>
+				<Method name='getDatos' path='/misdatos/persona' typeHttp='get' visibility='public'>
+					<Parameter typeHttp='RequestParam' type='String' name='info'/>
+				</Method>
+			</Methods>
+		</Route>
+		<Route name='PersonaInfoController'>
+			<Attributes>
+				<Attribute name='info' type='String' visibility='private'/>
+			</Attributes>
+			<Methods>
+				<Method name='sendInfo' path='/info/persona' typeHttp='post' visibility='public'>
+					<Parameter typeHttp='RequestPart' type='String' name='persona'/>
+				</Method>
+			</Methods>
+		</Route>
+	</RoutesPackage>
+</Project>

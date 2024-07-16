@@ -131,6 +131,10 @@ public class GeneradorController {
                 "            <artifactId>spring-boot-starter-test</artifactId>\n" +
                 "            <scope>test</scope>\n" +
                 "        </dependency>\n" +
+                "         <dependency>\n" +
+                "            <groupId>org.springframework.boot</groupId>\n" +
+                "            <artifactId>spring-boot-starter-web</artifactId>\n" +
+                "        </dependency>\n" +
                 "    </dependencies>\n" +
                 "    <build>\n" +
                 "        <plugins>\n" +
@@ -140,7 +144,7 @@ public class GeneradorController {
                 "            </plugin>\n" +
                 "        </plugins>\n" +
                 "    </build>\n" +
-                "    <repositories>" +
+                "    <repositories>\n" +
                 "       <repository>\n" +
                 "           <id>spring-snapshots</id>\n" +
                 "           <name>Spring Snapshots</name>\n" +

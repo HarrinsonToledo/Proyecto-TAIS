@@ -65,7 +65,7 @@ public class GeneradorController {
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\n" +
                 "         xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
-                "         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n"
+                "         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd\">\n"
                 +
                 "    <modelVersion>4.0.0</modelVersion>\n" +
                 "    <parent>\n" +
@@ -79,6 +79,19 @@ public class GeneradorController {
                 "    <version>0.0.1-SNAPSHOT</version>\n" +
                 "    <name>" + estructura.nameProject + "</name>\n" +
                 "    <description>" + estructura.description + "</description>\n" +
+                "<url/>" +
+                "<licenses>\n" +
+                "<license/>\n" +
+                "</licenses>\n" +
+                "<developers>\n" +
+                "<developer/>\n" +
+                "</developers>\n" +
+                "<scm>\n" +
+                "<connection/>\n" +
+                "<developerConnection/>\n" +
+                "<tag/>\n" +
+                "<url/>\n" +
+                "</scm>\n" +
                 "    <properties>\n" +
                 "        <java.version>" + estructura.java + "</java.version>\n" +
                 "    </properties>\n" +

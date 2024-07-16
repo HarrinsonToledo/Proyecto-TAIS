@@ -68,17 +68,17 @@ public class GeneradorController {
                 "         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n"
                 +
                 "    <modelVersion>4.0.0</modelVersion>\n" +
-                "    <groupId>" + estructura.group + "</groupId>\n" +
-                "    <artifactId>" + estructura.artifact + "</artifactId>\n" +
-                "    <version>0.0.1-SNAPSHOT</version>\n" +
-                "    <name>" + estructura.nameProject + "</name>\n" +
-                "    <description>" + estructura.description + "</description>\n" +
                 "    <parent>\n" +
                 "        <groupId>org.springframework.boot</groupId>\n" +
                 "        <artifactId>spring-boot-starter-parent</artifactId>\n" +
                 "        <version>" + estructura.spring + "</version>\n" +
                 "        <relativePath/> <!-- lookup parent from repository -->\n" +
                 "    </parent>\n" +
+                "    <groupId>" + estructura.group + "</groupId>\n" +
+                "    <artifactId>" + estructura.artifact + "</artifactId>\n" +
+                "    <version>0.0.1-SNAPSHOT</version>\n" +
+                "    <name>" + estructura.nameProject + "</name>\n" +
+                "    <description>" + estructura.description + "</description>\n" +
                 "    <properties>\n" +
                 "        <java.version>" + estructura.java + "</java.version>\n" +
                 "    </properties>\n" +

@@ -7,7 +7,7 @@
 				<Attribute name="Edad" type="int" visibility="private"/>
 			</Attributes>
 			<Methods>
-				<Method name="Comer" type="void" visibility="public">
+				<Method name="Comer" type="void" visibility="public" abstract="1">
 					<Parameter name="Cantidad" type="int"/>
 				</Method>
 			</Methods>

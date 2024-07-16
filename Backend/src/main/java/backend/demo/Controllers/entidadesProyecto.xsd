@@ -59,6 +59,8 @@
                                                                     use="required" />
                                                                 <xs:attribute name="visibility"
                                                                     type="xs:string" use="required" />
+                                                                <xs:attribute name="abstract"
+                                                                    type="xs:string" use="required" />
                                                             </xs:complexType>
                                                         </xs:element>
                                                     </xs:sequence>

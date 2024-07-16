@@ -17,8 +17,7 @@ public class ProcessTextXML {
     public ArrayList<String> extractText(String text, String separate) {
         ArrayList<String> textSeparate = new ArrayList<>();
 
-        String regex = separate;
-        Pattern pattern = Pattern.compile(regex, Pattern.DOTALL);
+        Pattern pattern = Pattern.compile(separate, Pattern.DOTALL);
         Matcher matcher = pattern.matcher(text);
 
         while (matcher.find()) {
@@ -28,9 +27,22 @@ public class ProcessTextXML {
         return textSeparate;
     }
 
+    public ArrayList<String> extractTextSingle(String text, String separate) {
+        ArrayList<String> textSeparate = new ArrayList<>();
+
+        Pattern pattern = Pattern.compile(separate);
+        Matcher matcher = pattern.matcher(text);
+
+        while (matcher.find()) {
+            textSeparate.add(matcher.group(1));
+        }
+
+        return textSeparate;
+    }
+
     public void processXML(String XML) {
-        textClass = extractText(XML, "<Class(.*?)</Class>");
-        textInterface = extractText(XML, "<Interface(.*?)</Interface>");
+        textClass = extractText(XML, "<Class (.*?)</Class>");
+        textInterface = extractText(XML, "<Interface (.*?)</Interface>");
         textRoute = extractText(XML, "<Route (.*?)</Route>");
     }
 

@@ -68,13 +68,16 @@ public class XMLController {
         ProcessTextXML PXML = ProcessTextXML.getInstance();
         PXML.processXML(xmlContent);
 
+        GeneradorController generador = new GeneradorController();
+
+        generador.createSpringBootProjectStructure(estructura);
         ///
 
         ///
 
         if (PXML.getTextClass().size() > 0) {
-            //GeneradorClass GC = GeneradorClass.getInstance();
-            //GC.Generar(PXML.getTextClass());
+            // GeneradorClass GC = GeneradorClass.getInstance();
+            // GC.Generar(PXML.getTextClass());
         }
         if (PXML.getTextInterface().size() > 0) {
             GeneradorInterface GI = GeneradorInterface.getInstance();

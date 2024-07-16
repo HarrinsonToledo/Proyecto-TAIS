@@ -24,7 +24,7 @@ public class GeneradorClass {
     public GeneradorClass() {
         XML = ProcessTextXML.getInstance();
 
-        this.outputDirectory = "Backend/src/main/java/backend/demo/Logica/LogicGenerateInterface/"; // Default
+        this.outputDirectory = "Backend/src/main/java/backend/demo/Logica/LogicGenerateClass/"; // Default
                                                                                                 // directory
         createOutputDirectory();
     }
@@ -77,7 +77,13 @@ public class GeneradorClass {
         if(mth.size() != 0) {
             for(String y: mth) {
                 String x = XML.extractText(y, "<Method (.*?)>").get(0);
+
+                //
+
                 txt += "\t" + XML.extractTextSingle(x, "visibility=\"(.*?)\"").get(0) + " ";
+                if(XML.extractTextSingle(x, "abstract=\"(.*?)\"").get(0).equals("1")) {
+                    txt += " abstract ";
+                }
                 txt += XML.extractTextSingle(x, "type=\"(.*?)\"").get(0) + " ";
                 txt += XML.extractTextSingle(x, "name=\"(.*?)\"").get(0);
 

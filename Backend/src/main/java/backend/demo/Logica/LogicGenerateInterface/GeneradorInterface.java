@@ -46,7 +46,9 @@ public class GeneradorInterface {
     }
 
     public String start(String inter) {
-        String txt = "public interface " + XML.extractTextSingle(inter, "<Interface name=\"(.*?)\">").get(0) + "{\n";
+        String txt = "public interface " + XML.extractTextSingle(inter, "<Interface name=\"(.*?)\">").get(0) 
+        
+        + "{\n";
 
         return txt;
     }

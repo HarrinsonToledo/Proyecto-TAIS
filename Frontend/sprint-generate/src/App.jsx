@@ -29,13 +29,10 @@ function App() {
     setPaquete(event.target.value + "." + artefacto);
   };
 
-  const InputArtefactoChange = (event) => {
+  const InputArtName = (event) => {
     setArtefacto(event.target.value);
-    setPaquete(grupo + "." + event.target.value);
-  };
-
-  const InputNombreChange = (event) => {
     setNombre(event.target.value);
+    setPaquete(grupo + "." + event.target.value);
   };
 
   const InputDescripcionChange = (event) => {
@@ -196,11 +193,11 @@ function App() {
         </section>
         <section className='individual'>
           <p className='in-label'>Artefacto</p>
-          <input type="text" value={artefacto} onChange={InputArtefactoChange} className='in-txt' />
+          <input type="text" value={artefacto} onChange={InputArtName} className='in-txt' />
         </section>
         <section className='individual'>
           <p className='in-label'>Nombre</p>
-          <input type="text" value={nombre} onChange={InputNombreChange} className='in-txt' />
+          <input type="text" value={nombre} onChange={InputArtName} className='in-txt' />
         </section>
         <section className='individual'>
           <p className='in-label'>Descripción</p>

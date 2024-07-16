@@ -13,7 +13,7 @@ public class GeneradorInterface {
     }
 
     public String start(String inter) {
-        String txt = "public Class " + XML.extractText(inter, "<Interface name=\"(.*?)\">").get(0) + "{\n";
+        String txt = "public Class " + XML.extractTextSingle(inter, "<Interface name=\"(.*?)\">").get(0) + "{\n";
 
         return txt;
     }
@@ -40,12 +40,13 @@ public class GeneradorInterface {
         ArrayList<String> mth = XML.extractText(inter, "<Method (.*?)</Method>");
 
         if(mth.size() != 0) {
-            for(String x: mth) {
+            for(String y: mth) {
+                String x = XML.extractText(y, "<Method (.*?)>").get(0);
                 txt += "\t" + XML.extractTextSingle(x, "visibility=\"(.*?)\"").get(0) + " ";
                 txt += XML.extractTextSingle(x, "type=\"(.*?)\"").get(0) + " ";
                 txt += XML.extractTextSingle(x, "name=\"(.*?)\"").get(0);
 
-                txt += "(" + paramethers(x) + ")";
+                txt += "(" + paramethers(y) + ")";
 
                 if(XML.extractTextSingle(x, "abstract=\"(.*?)\"").get(0) == "0") {
                     txt += ";\n";

@@ -4,8 +4,17 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
@@ -30,6 +39,7 @@ import backend.demo.Logica.LogicGenerateClass.GeneradorClass;
 import backend.demo.Logica.LogicGenerateInterface.GeneradorInterface;
 import backend.demo.Logica.LogicGenerateRoute.GeneradorRoute;
 import backend.demo.Logica.ProcesarTexto.ProcessTextXML;
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
@@ -37,7 +47,7 @@ import backend.demo.Logica.ProcesarTexto.ProcessTextXML;
 public class XMLController {
 
     @PostMapping("/validar")
-    String validar(@RequestParam("xml") MultipartFile xml, @RequestPart("jsonData") String jsonData)
+    void validar(@RequestParam("xml") MultipartFile xml, @RequestPart("jsonData") String jsonData, HttpServletResponse response)
             throws IOException, SAXException {
 
         try {
@@ -56,37 +66,86 @@ public class XMLController {
             ObjectMapper objectMapper = new ObjectMapper();
             Estructura estructura = objectMapper.readValue(jsonData, Estructura.class);
 
-            GenerateProject(xmlContent, estructura);
-            return "Proceso Exitoso!!";
+            GenerateProject(xmlContent, estructura, response);
         } catch (SAXException e) {
-            return "Error de validación XML: " + e.getMessage();
+            response.sendError(400, "Error de validación XML: " + e.getMessage());
         }
 
     }
 
-    public void GenerateProject(String xmlContent, Estructura estructura) {
+    public void GenerateProject(String xmlContent, Estructura estructura, HttpServletResponse response) throws IOException {
         ProcessTextXML PXML = ProcessTextXML.getInstance();
         PXML.processXML(xmlContent);
 
         GeneradorController generador = new GeneradorController();
 
-        generador.createSpringBootProjectStructure(estructura);
+        //generador.createSpringBootProjectStructure(estructura);
         ///
 
         ///
 
-        if (PXML.getTextClass().size() > 0) {
-            // GeneradorClass GC = GeneradorClass.getInstance();
-            // GC.Generar(PXML.getTextClass());
+        //ZipUtils.compress();
+
+        downloadZip(response);
+
+        // if (PXML.getTextClass().size() > 0) {
+        //     GeneradorClass GC = GeneradorClass.getInstance();
+        //     GC.Generar(PXML.getTextClass());
+        // }
+        // if (PXML.getTextInterface().size() > 0) {
+        //     GeneradorInterface GI = GeneradorInterface.getInstance();
+        //     GI.Generar(PXML.getTextInterface());
+        // }
+        // if (PXML.getTextRoute().size() > 0) {
+        //     GeneradorRoute GR = GeneradorRoute.getInstance();
+        //     GR.setOutputDirectory("Backend/src/main/java/backend/demo/Logica/LogicGenerateRoute/");
+        //     GR.Generar(PXML.getTextRoute());
+        // }
+    }
+
+    public void downloadZip(HttpServletResponse response) throws IOException {
+        Path sourceDir = Paths.get("Backend/src/Result/prueba");
+        String zipFileName = "prueba.zip";
+
+        response.setContentType("application/zip");
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + zipFileName + "\"");
+
+        try (ZipOutputStream zos = new ZipOutputStream(response.getOutputStream())) {
+            Files.walk(sourceDir)
+                .filter(path -> !Files.isDirectory(path))
+                .forEach(path -> {
+                    ZipEntry zipEntry = new ZipEntry(sourceDir.relativize(path).toString());
+                    try {
+                        zos.putNextEntry(zipEntry);
+                        Files.copy(path, zos);
+                        zos.closeEntry();
+                    } catch (IOException e) {
+                        throw new UncheckedIOException(e);
+                    }
+                });
+            
+            Path dirToDelete = Paths.get("Backend/src/Result/prueba");
+            deleteDirectory(dirToDelete);
         }
-        if (PXML.getTextInterface().size() > 0) {
-            GeneradorInterface GI = GeneradorInterface.getInstance();
-            GI.Generar(PXML.getTextInterface());
-        }
-        if (PXML.getTextRoute().size() > 0) {
-            GeneradorRoute GR = GeneradorRoute.getInstance();
-            GR.setOutputDirectory("Backend/src/main/java/backend/demo/Logica/LogicGenerateRoute/");
-            GR.Generar(PXML.getTextRoute());
+    }
+
+    public static void deleteDirectory(Path path) throws IOException {
+        if (Files.isDirectory(path)) {
+            Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    Files.delete(file);
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                    Files.delete(dir);
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } else {
+            throw new IllegalArgumentException("La ruta especificada no es un directorio");
         }
     }
 }

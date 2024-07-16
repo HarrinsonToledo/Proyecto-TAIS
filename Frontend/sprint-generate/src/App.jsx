@@ -5,8 +5,8 @@ import './App.css';
 function App() {
   const [error, setError] = useState('');
 
-  const [springSelect, setSpringSelect] = useState('3.3.2 (SNAPSHOT)');
-  const [javaSelect, setJavaSelect] = useState('Java 22');
+  const [springSelect, setSpringSelect] = useState('3.3.2-SNAPSHOT');
+  const [javaSelect, setJavaSelect] = useState('22');
 
   const [grupo, setGrupo] = useState("com.example");
   const [artefacto, setArtefacto] = useState("demo");
@@ -82,10 +82,16 @@ function App() {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
+      responseType: 'blob'
     })
     .then(response => {
-      setError(response.data);
-      console.log('Respuesta del servidor:', response.data);
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', jsonData.nameProject + '.zip'); // Nombre del archivo a descargar
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
     })
     .catch(error => {
       setError('Hubo un error al subir el archivo: ' + error.message);
@@ -109,8 +115,8 @@ function App() {
             <input
               name='v-spring'
               type="radio"
-              value="3.3.2 (SNAPSHOT)"
-              checked={springSelect === "3.3.2 (SNAPSHOT)"}
+              value="3.3.2-SNAPSHOT"
+              checked={springSelect === "3.3.2-SNAPSHOT"}
               onChange={changeSpringSelect}
             />
             <span className="checkmark"></span>
@@ -131,8 +137,8 @@ function App() {
             <input
               name='v-spring'
               type="radio"
-              value="3.2.8 (SNAPSHOT)"
-              checked={springSelect === "3.2.8 (SNAPSHOT)"}
+              value="3.2.8-SNAPSHOT"
+              checked={springSelect === "3.2.8-SNAPSHOT"}
               onChange={changeSpringSelect}
             />
             <span className="checkmark"></span>
@@ -155,8 +161,8 @@ function App() {
             <input
               name='v-java'
               type="radio"
-              value="Java 22"
-              checked={javaSelect === "Java 22"}
+              value="22"
+              checked={javaSelect === "22"}
               onChange={changeJavaSelect}
             />
             <span className="checkmark"></span>
@@ -166,8 +172,8 @@ function App() {
             <input
               name='v-java'
               type="radio"
-              value="Java 21"
-              checked={javaSelect === "Java 21"}
+              value="21"
+              checked={javaSelect === "21"}
               onChange={changeJavaSelect}
             />
             <span className="checkmark"></span>
@@ -177,8 +183,8 @@ function App() {
             <input
               name='v-java'
               type="radio"
-              value="Java 17"
-              checked={javaSelect === "Java 17"}
+              value="17"
+              checked={javaSelect === "17"}
               onChange={changeJavaSelect}
             />
             <span className="checkmark"></span>

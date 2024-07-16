@@ -23,6 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import backend.demo.Logica.Estructura;
+import backend.demo.Logica.LogicGenerateClass.GeneradorClass;
 import backend.demo.Logica.LogicGenerateInterface.GeneradorInterface;
 import backend.demo.Logica.LogicGenerateRoute.GeneradorRoute;
 import backend.demo.Logica.ProcesarTexto.ProcessTextXML;
@@ -49,7 +53,10 @@ public class XMLController {
                     new InputStreamReader(xml.getInputStream(), StandardCharsets.UTF_8))
                     .lines().collect(Collectors.joining("\n"));
 
-            GenerateProject(xmlContent);
+            ObjectMapper objectMapper = new ObjectMapper();
+            Estructura estructura = objectMapper.readValue(jsonData, Estructura.class);
+
+            GenerateProject(xmlContent, estructura);
             return "Proceso Exitoso!!";
         } catch (SAXException e) {
             return "Error de validación XML: " + e.getMessage();
@@ -57,12 +64,17 @@ public class XMLController {
 
     }
 
-    public void GenerateProject(String xmlContent) {
+    public void GenerateProject(String xmlContent, Estructura estructura) {
         ProcessTextXML PXML = ProcessTextXML.getInstance();
         PXML.processXML(xmlContent);
 
-        if (PXML.getTextClass().size() > 0) {
+        ///
 
+        ///
+
+        if (PXML.getTextClass().size() > 0) {
+            //GeneradorClass GC = GeneradorClass.getInstance();
+            //GC.Generar(PXML.getTextClass());
         }
         if (PXML.getTextInterface().size() > 0) {
             GeneradorInterface GI = GeneradorInterface.getInstance();

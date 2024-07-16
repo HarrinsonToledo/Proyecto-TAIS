@@ -73,15 +73,13 @@ function App() {
       namePacke: paquete
     };
 
-    console.log(jsonData);
-
     if (selectedFile == null) {
       setError('No se subio el archivo XML');
       return;
     }
 
     formData.append('xml', selectedFile);
-    formData.append('jsonData', JSON.stringify(jsonData));
+    formData.append('jsonData', new Blob([JSON.stringify(jsonData)], { type: 'application/json' }));
 
     axios.post('http://localhost:8080/xml/validar', formData, {
       headers: {

@@ -1,98 +1,139 @@
 package backend.demo.Logica.LogicGenerateClass;
 
 import org.w3c.dom.*;
+
+import backend.demo.Logica.LogicGenerateInterface.GeneradorInterface;
+import backend.demo.Logica.LogicGenerateRoute.GeneradorRoute;
+import backend.demo.Logica.ProcesarTexto.ProcessTextXML;
+
 import javax.xml.parsers.*;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GeneradorClass {
-    public static void main(String[] args) {
-        try {
-            File inputFile = new File("input.xml");
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(inputFile);
-            doc.getDocumentElement().normalize();
+    private static GeneradorClass instance;
+    private ProcessTextXML XML;
+    private String outputDirectory;
+    private static final Logger LOGGER = Logger.getLogger(GeneradorRoute.class.getName());
 
-            NodeList nList = doc.getElementsByTagName("Class");
+    public GeneradorClass() {
+        XML = ProcessTextXML.getInstance();
 
-            for (int temp = 0; temp < nList.getLength(); temp++) {
-                Node nNode = nList.item(temp);
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) nNode;
+        this.outputDirectory = "Backend/src/main/java/backend/demo/Logica/LogicGenerateInterface/"; // Default
+                                                                                                // directory
+        createOutputDirectory();
+    }
 
-                    String className = eElement.getAttribute("name");
-                    boolean isAbstract = eElement.getAttribute("abstract").equals("1");
-                    generateJavaClass(className, isAbstract, eElement);
-                }
+    public void setOutputDirectory(String outputDirectory) {
+        this.outputDirectory = outputDirectory;
+        createOutputDirectory();
+    }
+
+    private void createOutputDirectory() {
+        File directory = new File(outputDirectory);
+        if (!directory.exists()) {
+            boolean created = directory.mkdirs();
+            if (created) {
+                LOGGER.info("Output directory created: " + outputDirectory);
+            } else {
+                LOGGER.severe("Failed to create output directory: " + outputDirectory);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            LOGGER.info("Output directory already exists: " + outputDirectory);
         }
     }
 
-    private static void generateJavaClass(String className, boolean isAbstract, Element classElement) throws IOException {
-        String fileName = className + ".java";
-        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+    public String start(String inter) {
+        String txt = "public interface " + XML.extractTextSingle(inter, "<Interface name=\"(.*?)\">").get(0) + "{\n";
 
-        if (isAbstract) {
-            writer.write("public abstract class " + className + " {\n");
-        } else {
-            writer.write("public class " + className + " {\n");
-        }
+        return txt;
+    }
 
-        NodeList attrList = classElement.getElementsByTagName("Attribute");
-        for (int i = 0; i < attrList.getLength(); i++) {
-            Node attrNode = attrList.item(i);
-            if (attrNode.getNodeType() == Node.ELEMENT_NODE) {
-                Element attrElement = (Element) attrNode;
-                String attrVisibility = attrElement.getAttribute("visibility");
-                String attrType = attrElement.getAttribute("type");
-                String attrName = attrElement.getAttribute("name");
-                writer.write("    " + attrVisibility + " " + attrType + " " + attrName + ";\n");
+    public String atributtes(String inter) {
+        String txt = "";
+
+        ArrayList<String> att = XML.extractText(inter, "<Attribute (.*?)/>");
+
+        if(att.size() != 0) {
+            for(String x: att) {
+                txt += "\t" + XML.extractTextSingle(x, "type=\"(.*?)\"").get(0) + " ";
+                txt += XML.extractTextSingle(x, "name=\"(.*?)\"").get(0) + ";\n";
             }
         }
 
-        NodeList methodList = classElement.getElementsByTagName("Method");
-        for (int i = 0; i < methodList.getLength(); i++) {
-            Node methodNode = methodList.item(i);
-            if (methodNode.getNodeType() == Node.ELEMENT_NODE) {
-                Element methodElement = (Element) methodNode;
-                String methodVisibility = methodElement.getAttribute("visibility");
-                String methodType = methodElement.getAttribute("type");
-                String methodName = methodElement.getAttribute("name");
-                boolean methodAbstract = methodElement.getAttribute("abstract").equals("1");
+        return txt;
+    }
 
-                if (methodAbstract) {
-                    writer.write("    " + methodVisibility + " abstract " + methodType + " " + methodName + "(");
-                } else {
-                    writer.write("    " + methodVisibility + " " + methodType + " " + methodName + "(");
-                }
+    public String methods(String inter) {
+        String txt = "";
 
-                NodeList paramList = methodElement.getElementsByTagName("Parameter");
-                for (int j = 0; j < paramList.getLength(); j++) {
-                    Node paramNode = paramList.item(j);
-                    if (paramNode.getNodeType() == Node.ELEMENT_NODE) {
-                        Element paramElement = (Element) paramNode;
-                        String paramType = paramElement.getAttribute("type");
-                        String paramName = paramElement.getAttribute("name");
-                        if (!paramType.equals("None")) {
-                            if (j > 0) {
-                                writer.write(", ");
-                            }
-                            writer.write(paramType + " " + paramName);
-                        }
-                    }
-                }
-                writer.write(") {\n");
-                if (!methodAbstract) {
-                    writer.write("        // TODO: implement " + methodName + "\n");
-                    writer.write("    }\n");
-                } else {
-                    writer.write("    }\n");
+        ArrayList<String> mth = XML.extractText(inter, "<Method (.*?)</Method>");
+
+        if(mth.size() != 0) {
+            for(String y: mth) {
+                String x = XML.extractText(y, "<Method (.*?)>").get(0);
+                txt += "\t" + XML.extractTextSingle(x, "visibility=\"(.*?)\"").get(0) + " ";
+                txt += XML.extractTextSingle(x, "type=\"(.*?)\"").get(0) + " ";
+                txt += XML.extractTextSingle(x, "name=\"(.*?)\"").get(0);
+
+                txt += "(" + paramethers(y) + ")";
+                if(XML.extractTextSingle(x, "abstract=\"(.*?)\"").get(0).equals("1")) {
+                    txt += ";\n";
+                } else if (XML.extractTextSingle(x, "abstract=\"(.*?)\"").get(0).equals("0")) {
+                    txt += "{\n\n\t}";
                 }
             }
         }
-        writer.write("}\n");
-        writer.close();
+        return txt;
+    }
+
+    public String paramethers(String info) {
+        String txt = "";
+
+        ArrayList<String> prm = XML.extractText(info, "<Parameter (.*?)/>");
+
+        if(prm.size() != 0) {
+            for(int i = 0; i < prm.size(); i++) {
+                txt += XML.extractTextSingle(prm.get(i), "type=\"(.*?)\"").get(0) + " ";
+                txt += XML.extractTextSingle(prm.get(i), "name=\"(.*?)\"").get(0);
+
+                if(i != prm.size()-1) {
+                    txt += ",";
+                }
+            }
+        }
+
+        return txt;
+    }
+
+    public void Generar(ArrayList<String> lista) {
+        String content = "";
+        for(String x: lista) {
+            content = start(x) + atributtes(x) + methods(x) + "\n}";
+            writeJavaFile(XML.extractTextSingle(x, "<Interface name=\"(.*?)\">").get(0), content);
+        }
+    }
+
+    private void writeJavaFile(String className, String classContent) {
+        Path path = Paths.get(outputDirectory + className + ".java");
+        try {
+            LOGGER.info("Writing file: " + path.toAbsolutePath());
+            Files.write(path, classContent.getBytes());
+            LOGGER.info("File written successfully: " + path.toAbsolutePath());
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Failed to write file: " + path.toAbsolutePath(), e);
+        }
+    }
+
+    public static GeneradorClass getInstance() {
+        if (instance == null) {
+            instance = new GeneradorClass();
+        }
+        return instance;
     }
 }

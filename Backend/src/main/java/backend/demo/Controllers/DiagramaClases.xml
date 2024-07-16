@@ -4,10 +4,28 @@
 	<LogicPackage>
 		<Interface name="Animal">
 			<Attributes>
-				<Attribute name="Edad" type="int" visibility="private"/>
+				<Attribute name="Edad" type="int"/>
 			</Attributes>
 			<Methods>
 				<Method name="Comer" type="void" visibility="public" abstract="1">
+					<Parameter name="Cantidad" type="int"/>
+				</Method>
+			</Methods>
+		</Interface>
+		<Interface name="Carro">
+			<Attributes>
+				<Attribute name="Motor" type="int"/>
+				<Attribute name="Puerta" type="int"/>
+			</Attributes>
+			<Methods>
+				<Method name="Manejar" type="void" visibility="public" abstract="1">
+					<Parameter name="Cantidad" type="int"/>
+					<Parameter name="Cantidad" type="int"/>
+					<Parameter name="Cantidad" type="int"/>
+				</Method>
+				<Method name="Manejar" type="void" visibility="public" abstract="1">
+					<Parameter name="Cantidad" type="int"/>
+					<Parameter name="Cantidad" type="int"/>
 					<Parameter name="Cantidad" type="int"/>
 				</Method>
 			</Methods>
@@ -51,6 +69,16 @@
 	</LogicPackage>
 	<RoutesPackage>
 		<Route name="PersonaController">
+			<Attributes>
+				<Attribute name="datos" type="String" visibility="private"/>
+			</Attributes>
+			<Methods>
+				<Method name="getDatos" path="/misdatos/persona" typeHttp="get" visibility="public">
+					<Parameter typeHttp="RequestParam" type="String" name="info"/>
+				</Method>
+			</Methods>
+		</Route>
+		<Route name="PersonaContttt">
 			<Attributes>
 				<Attribute name="datos" type="String" visibility="private"/>
 			</Attributes>

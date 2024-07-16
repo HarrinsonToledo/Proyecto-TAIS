@@ -22,8 +22,6 @@
                                                                 <xs:attribute name="type"
                                                                     type="xs:string"
                                                                     use="required" />
-                                                                <xs:attribute name="visibility"
-                                                                    type="xs:string" />
                                                             </xs:complexType>
                                                         </xs:element>
                                                     </xs:sequence>

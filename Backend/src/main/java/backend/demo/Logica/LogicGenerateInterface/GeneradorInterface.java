@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import backend.demo.Logica.Estructura;
 import backend.demo.Logica.LogicGenerateRoute.GeneradorRoute;
 import backend.demo.Logica.ProcesarTexto.ProcessTextXML;
 
@@ -110,10 +111,10 @@ public class GeneradorInterface {
         return txt;
     }
 
-    public void Generar(ArrayList<String> lista) {
+    public void Generar(ArrayList<String> lista, Estructura estructura) {
         String content = "";
         for(String x: lista) {
-            content = start(x) + atributtes(x) + methods(x) + "\n}";
+            content = "package " + estructura.namePacke + ".LogicPackage;\n\n" + start(x) + atributtes(x) + methods(x) + "\n}";
             writeJavaFile(XML.extractTextSingle(x, "<Interface name=\"(.*?)\">").get(0), content);
         }
     }

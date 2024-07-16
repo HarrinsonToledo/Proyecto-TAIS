@@ -1,6 +1,8 @@
 package backend.demo.Logica.LogicGenerateClass;
 
 import org.w3c.dom.*;
+
+import backend.demo.Logica.Estructura;
 import backend.demo.Logica.LogicGenerateInterface.GeneradorInterface;
 import backend.demo.Logica.LogicGenerateRoute.GeneradorRoute;
 import backend.demo.Logica.ProcesarTexto.ProcessTextXML;
@@ -133,9 +135,9 @@ public class GeneradorClass {
         return txt.toString();
     }
 
-    public void Generar(ArrayList<String> classList) {
+    public void Generar(ArrayList<String> classList, Estructura estructura) {
         for (String x : classList) {
-            String content = start(x) + attributes(x) + methods(x) + "}\n";
+            String content = "package " + estructura.namePacke + ".LogicPackage;\n\n" + start(x) + attributes(x) + methods(x) + "}\n";
             writeJavaFile(XML.extractTextSingle(x, "<Class name=\"(.*?)\" ").get(0), content);
         }
     }

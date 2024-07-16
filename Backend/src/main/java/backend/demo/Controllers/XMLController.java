@@ -83,25 +83,27 @@ public class XMLController {
 
         generador.createSpringBootProjectStructure(estructura);
 
-        // downloadZip(response);
-
-        // if (PXML.getTextClass().size() > 0) {
-        // GeneradorClass GC = GeneradorClass.getInstance();
-        // GC.Generar(PXML.getTextClass());
-        // }
-        // if (PXML.getTextInterface().size() > 0) {
-        // GeneradorInterface GI = GeneradorInterface.getInstance();
-        // GI.Generar(PXML.getTextInterface());
-        // }
-        if (PXML.getTextRoute().size() > 0) {
-            GeneradorRoute GR = GeneradorRoute.getInstance();
-            GR.setOutputDirectory("Backend/src/main/java/backend/demo/Logica/LogicGenerateRoute/");
-            GR.Generar(PXML.getTextRoute(), estructura);
+        if (PXML.getTextClass().size() > 0) {
+        GeneradorClass GC = GeneradorClass.getInstance();
+        GC.setOutputDirectory("Backend/src/Result/" + estructura.nameProject +"/src/main/java/" + estructura.namePacke.replace('.', '/') + "/LogicPackage/");
+        GC.Generar(PXML.getTextClass(), estructura);
         }
+        if (PXML.getTextInterface().size() > 0) {
+        GeneradorInterface GI = GeneradorInterface.getInstance();
+        GI.setOutputDirectory("Backend/src/Result/" + estructura.nameProject +"/src/main/java/" + estructura.namePacke.replace('.', '/') + "/LogicPackage/");
+        GI.Generar(PXML.getTextInterface(), estructura);
+        }
+        if (PXML.getTextRoute().size() > 0) {
+        GeneradorRoute GR = GeneradorRoute.getInstance();
+        GR.setOutputDirectory("Backend/src/Result/" + estructura.nameProject +"/src/main/java/" + estructura.namePacke.replace('.', '/') + "/RoutesPackage/");
+        GR.Generar(PXML.getTextRoute(), estructura);
+        }
+
+        downloadZip(response, estructura);
     }
 
-    public void downloadZip(HttpServletResponse response) throws IOException {
-        Path sourceDir = Paths.get("Backend/src/Result/prueba");
+    public void downloadZip(HttpServletResponse response, Estructura estructura) throws IOException {
+        Path sourceDir = Paths.get("Backend/src/Result/");
         String zipFileName = "prueba.zip";
 
         response.setContentType("application/zip");
@@ -121,7 +123,7 @@ public class XMLController {
                         }
                     });
 
-            Path dirToDelete = Paths.get("Backend/src/Result/prueba");
+            Path dirToDelete = Paths.get("Backend/src/Result/" + estructura.nameProject);
             deleteDirectory(dirToDelete);
         }
     }

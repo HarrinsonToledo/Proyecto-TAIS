@@ -11,7 +11,7 @@ import backend.demo.Logica.Estructura;
 public class GeneradorController {
 
     public static void createSpringBootProjectStructure(Estructura estructura) {
-        String baseDir = "Resultados/" + estructura.nameProject;
+        String baseDir = "Backend/src/Result/" + estructura.nameProject;
         new File(baseDir).mkdirs();
 
         // Creating directories

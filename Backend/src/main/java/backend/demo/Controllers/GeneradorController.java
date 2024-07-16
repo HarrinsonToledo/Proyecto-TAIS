@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.swing.Spring;
+
 import backend.demo.Logica.Estructura;
 
 public class GeneradorController {
@@ -18,7 +20,8 @@ public class GeneradorController {
                 baseDir + "/src/main/resources",
                 baseDir + "/src/test/java/" + estructura.namePacke.replace('.', '/'),
                 baseDir + "/src/test/resources",
-                baseDir + "/target",
+                baseDir + "/target/classes/" + estructura.namePacke.replace('.', '/'),
+                baseDir + "/target/test-classes/" + estructura.namePacke.replace('.', '/'),
                 baseDir + "/.mvn"
         };
 
@@ -38,7 +41,20 @@ public class GeneradorController {
         createFile(baseDir + "/.gitignore", gitignoreContent);
 
         // Creating HELP.md
-        createFile(baseDir + "/HELP.md", "This is a Spring Boot project.");
+        createFile(baseDir + "/HELP.md", "# Getting Started\n\n" +
+                "### Reference Documentation\n" +
+                "For further reference, please consider the following sections:\n\n" +
+                "* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)\n" +
+                "* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/3.3.2-SNAPSHOT/maven-plugin/reference/html/)\n"
+                +
+                "* [Create an OCI image](https://docs.spring.io/spring-boot/docs/3.3.2-SNAPSHOT/maven-plugin/reference/html/#build-image)\n\n"
+                +
+                "### Maven Parent overrides\n\n" +
+                "Due to Maven's design, elements are inherited from the parent POM to the project POM.\n" +
+                "While most of the inheritance is fine, it also inherits unwanted elements like `<license>` and `<developers>` from the parent.\n"
+                +
+                "To prevent this, the project POM contains empty overrides for these elements.\n" +
+                "If you manually switch to a different parent and actually want the inheritance, you need to remove those overrides.");
 
         // Creating mvnw and mvnw.cmd
         createFile(baseDir + "/mvnw", generateMvnwContent());
@@ -49,6 +65,16 @@ public class GeneradorController {
         String mainClassPath = baseDir + "/src/main/java/" + estructura.namePacke.replace('.', '/') + "/"
                 + capitalizeFirstLetter(estructura.nameProject) + "Application.java";
         createFile(mainClassPath, mainClassContent);
+
+        // Creating the test class
+        createTestClass(baseDir, estructura);
+
+        // Simulating the target folder content
+        createTargetFolderContent(baseDir, estructura);
+
+        // Creating the maven-wrapper.properties file
+        String wrapperPropertiesContent = generateMavenWrapperPropertiesContent();
+        createFile(baseDir + "/.mvn/maven-wrapper.properties", wrapperPropertiesContent);
 
         System.out.println("Spring Boot project structure generated successfully.");
     }
@@ -79,19 +105,19 @@ public class GeneradorController {
                 "    <version>0.0.1-SNAPSHOT</version>\n" +
                 "    <name>" + estructura.nameProject + "</name>\n" +
                 "    <description>" + estructura.description + "</description>\n" +
-                "<url/>" +
-                "<licenses>\n" +
-                "<license/>\n" +
-                "</licenses>\n" +
-                "<developers>\n" +
-                "<developer/>\n" +
-                "</developers>\n" +
-                "<scm>\n" +
-                "<connection/>\n" +
-                "<developerConnection/>\n" +
-                "<tag/>\n" +
-                "<url/>\n" +
-                "</scm>\n" +
+                "    <url/>\n" +
+                "    <licenses>\n" +
+                "        <license/>\n" +
+                "    </licenses>\n" +
+                "    <developers>\n" +
+                "        <developer/>\n" +
+                "    </developers>\n" +
+                "    <scm>\n" +
+                "        <connection/>\n" +
+                "        <developerConnection/>\n" +
+                "        <tag/>\n" +
+                "        <url/>\n" +
+                "    </scm>\n" +
                 "    <properties>\n" +
                 "        <java.version>" + estructura.java + "</java.version>\n" +
                 "    </properties>\n" +
@@ -114,6 +140,26 @@ public class GeneradorController {
                 "            </plugin>\n" +
                 "        </plugins>\n" +
                 "    </build>\n" +
+                "    <repositories>" +
+                "       <repository>\n" +
+                "           <id>spring-snapshots</id>\n" +
+                "           <name>Spring Snapshots</name>\n" +
+                "           <url>https://repo.spring.io/snapshot</url>\n" +
+                "           <releases>\n" +
+                "               <enabled>false</enabled>\n" +
+                "           </releases>\n" +
+                "       </repository>\n" +
+                "     </repositories>\n" +
+                "     <pluginRepositories>\n" +
+                "       <pluginRepository>\n" +
+                "           <id>spring-snapshots</id>\n" +
+                "           <name>Spring Snapshots</name>\n" +
+                "           <url>https://repo.spring.io/snapshot</url>\n" +
+                "           <releases>\n" +
+                "               <enabled>false</enabled>\n" +
+                "           </releases>\n" +
+                "       </pluginRepository>\n" +
+                "     </pluginRepositories>\n" +
                 "</project>";
     }
 
@@ -131,13 +177,13 @@ public class GeneradorController {
                 "*.iws\n" +
                 ".project\n" +
                 ".settings/\n" +
-                ".vscode/\n";
+                ".vscode/";
     }
 
     private static String generateMvnwContent() {
         return "#!/bin/sh\n" +
                 "set -e\n" +
-                "MAVEN_HOME=\"$(cd \"$(dirname \"$0\")\" >/dev/null 2>&1 && pwd)/.mvn\"\n" +
+                "MAVEN_HOME=\"$(cd \"$(dirname \"$0\")\" >/dev/null 2>&1 and pwd)/.mvn\"\n" +
                 "exec \"$MAVEN_HOME/wrapper/mvnw\" \"$@\"\n";
     }
 
@@ -166,5 +212,58 @@ public class GeneradorController {
             return str;
         }
         return Character.toUpperCase(str.charAt(0)) + str.substring(1);
+    }
+
+    private static void createTestClass(String baseDir, Estructura estructura) {
+        String testClassName = capitalizeFirstLetter(estructura.nameProject) + "ApplicationTests";
+        String testClassContent = "package " + estructura.namePacke + ";\n\n" +
+                "import org.junit.jupiter.api.Test;\n" +
+                "import org.springframework.boot.test.context.SpringBootTest;\n\n" +
+                "@SpringBootTest\n" +
+                "public class " + testClassName + " {\n\n" +
+                "    @Test\n" +
+                "    public void contextLoads() {\n" +
+                "    }\n" +
+                "}\n";
+        String testClassPath = baseDir + "/src/test/java/" + estructura.namePacke.replace('.', '/') + "/"
+                + testClassName + ".java";
+        createFile(testClassPath, testClassContent);
+    }
+
+    private static void createTargetFolderContent(String baseDir, Estructura estructura) {
+        String classesDir = baseDir + "/target/classes/" + estructura.namePacke.replace('.', '/');
+        String testClassesDir = baseDir + "/target/test-classes/" + estructura.namePacke.replace('.', '/');
+
+        // Creating the files in classes directory
+        createFile(classesDir + "/" + capitalizeFirstLetter(estructura.nameProject) + "Application.class", "");
+
+        // Creating the application.properties file at the same level as classes
+        // directory
+        createFile(baseDir + "/target/classes/application.properties", "");
+
+        // Creating the files in test-classes directory
+        createFile(testClassesDir + "/" + capitalizeFirstLetter(estructura.nameProject) + "ApplicationTests.class", "");
+    }
+
+    private static String generateMavenWrapperPropertiesContent() {
+        return "# Licensed to the Apache Software Foundation (ASF) under one\n" +
+                "# or more contributor license agreements.  See the NOTICE file\n" +
+                "# distributed with this work for additional information\n" +
+                "# regarding copyright ownership.  The ASF licenses this file\n" +
+                "# to you under the Apache License, Version 2.0 (the\n" +
+                "# \"License\"); you may not use this file except in compliance\n" +
+                "# with the License.  You may obtain a copy of the License at\n" +
+                "#\n" +
+                "#   https://www.apache.org/licenses/LICENSE-2.0\n" +
+                "#\n" +
+                "# Unless required by applicable law or agreed to in writing,\n" +
+                "# software distributed under the License is distributed on an\n" +
+                "# \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY\n" +
+                "# KIND, either express or implied.  See the License for the\n" +
+                "# specific language governing permissions and limitations\n" +
+                "# under the License.\n" +
+                "wrapperVersion=3.3.2\n" +
+                "distributionType=only-script\n" +
+                "distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.7/apache-maven-3.9.7-bin.zip\n";
     }
 }

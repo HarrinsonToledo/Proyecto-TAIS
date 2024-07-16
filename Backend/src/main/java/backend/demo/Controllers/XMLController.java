@@ -47,7 +47,8 @@ import jakarta.servlet.http.HttpServletResponse;
 public class XMLController {
 
     @PostMapping("/validar")
-    void validar(@RequestParam("xml") MultipartFile xml, @RequestPart("jsonData") String jsonData, HttpServletResponse response)
+    void validar(@RequestParam("xml") MultipartFile xml, @RequestPart("jsonData") String jsonData,
+            HttpServletResponse response)
             throws IOException, SAXException {
 
         try {
@@ -73,33 +74,29 @@ public class XMLController {
 
     }
 
-    public void GenerateProject(String xmlContent, Estructura estructura, HttpServletResponse response) throws IOException {
+    public void GenerateProject(String xmlContent, Estructura estructura, HttpServletResponse response)
+            throws IOException {
         ProcessTextXML PXML = ProcessTextXML.getInstance();
         PXML.processXML(xmlContent);
 
         GeneradorController generador = new GeneradorController();
 
-        //generador.createSpringBootProjectStructure(estructura);
-        ///
+        generador.createSpringBootProjectStructure(estructura);
 
-        ///
-
-        //ZipUtils.compress();
-
-        downloadZip(response);
+        // downloadZip(response);
 
         // if (PXML.getTextClass().size() > 0) {
-        //     GeneradorClass GC = GeneradorClass.getInstance();
-        //     GC.Generar(PXML.getTextClass());
+        // GeneradorClass GC = GeneradorClass.getInstance();
+        // GC.Generar(PXML.getTextClass());
         // }
         // if (PXML.getTextInterface().size() > 0) {
-        //     GeneradorInterface GI = GeneradorInterface.getInstance();
-        //     GI.Generar(PXML.getTextInterface());
+        // GeneradorInterface GI = GeneradorInterface.getInstance();
+        // GI.Generar(PXML.getTextInterface());
         // }
         // if (PXML.getTextRoute().size() > 0) {
-        //     GeneradorRoute GR = GeneradorRoute.getInstance();
-        //     GR.setOutputDirectory("Backend/src/main/java/backend/demo/Logica/LogicGenerateRoute/");
-        //     GR.Generar(PXML.getTextRoute());
+        // GeneradorRoute GR = GeneradorRoute.getInstance();
+        // GR.setOutputDirectory("Backend/src/main/java/backend/demo/Logica/LogicGenerateRoute/");
+        // GR.Generar(PXML.getTextRoute());
         // }
     }
 
@@ -112,18 +109,18 @@ public class XMLController {
 
         try (ZipOutputStream zos = new ZipOutputStream(response.getOutputStream())) {
             Files.walk(sourceDir)
-                .filter(path -> !Files.isDirectory(path))
-                .forEach(path -> {
-                    ZipEntry zipEntry = new ZipEntry(sourceDir.relativize(path).toString());
-                    try {
-                        zos.putNextEntry(zipEntry);
-                        Files.copy(path, zos);
-                        zos.closeEntry();
-                    } catch (IOException e) {
-                        throw new UncheckedIOException(e);
-                    }
-                });
-            
+                    .filter(path -> !Files.isDirectory(path))
+                    .forEach(path -> {
+                        ZipEntry zipEntry = new ZipEntry(sourceDir.relativize(path).toString());
+                        try {
+                            zos.putNextEntry(zipEntry);
+                            Files.copy(path, zos);
+                            zos.closeEntry();
+                        } catch (IOException e) {
+                            throw new UncheckedIOException(e);
+                        }
+                    });
+
             Path dirToDelete = Paths.get("Backend/src/Result/prueba");
             deleteDirectory(dirToDelete);
         }

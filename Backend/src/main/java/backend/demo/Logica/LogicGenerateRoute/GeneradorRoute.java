@@ -1,6 +1,9 @@
 package backend.demo.Logica.LogicGenerateRoute;
 
 import org.w3c.dom.*;
+
+import backend.demo.Logica.Estructura;
+
 import javax.xml.parsers.*;
 import java.io.*;
 import java.nio.file.*;
@@ -12,10 +15,10 @@ public class GeneradorRoute {
     private static GeneradorRoute instance;
     private String outputDirectory;
     private static final Logger LOGGER = Logger.getLogger(GeneradorRoute.class.getName());
+    private String packageName;
 
     public GeneradorRoute() {
-        this.outputDirectory = "Backend/src/main/java/backend/demo/Logica/LogicGenerateRoute/"; // Default
-                                                                                                // directory
+        this.outputDirectory = "Backend/src/main/java/backend/demo/Logica/LogicGenerateRoute/"; // Default directory
         createOutputDirectory();
     }
 
@@ -38,7 +41,12 @@ public class GeneradorRoute {
         }
     }
 
-    public void Generar(ArrayList<String> lista) {
+    public void setPackageName(Estructura estructura) {
+        this.packageName = estructura.namePacke;
+    }
+
+    public void Generar(ArrayList<String> lista, Estructura estructura) {
+        setPackageName(estructura);
         for (String routeXML : lista) {
             try {
                 processRoute(routeXML);
@@ -103,13 +111,13 @@ public class GeneradorRoute {
 
         // Generate the content of the Java class
         String classContent = generateJavaClassContent(routeName, attributesBuilder.toString(),
-                methodsBuilder.toString());
+                methodsBuilder.toString(), packageName);
 
         // Write the Java class to a file
         writeJavaFile(routeName, classContent);
     }
 
-    private String generateJavaClassContent(String className, String attributes, String methods) {
+    private String generateJavaClassContent(String className, String attributes, String methods, String packageName) {
         String imports = "import java.util.ArrayList;\n" +
                 "import java.util.HashMap;\n" +
                 "import java.util.List;\n" +
@@ -118,7 +126,8 @@ public class GeneradorRoute {
                 "import org.springframework.http.ResponseEntity;\n" +
                 "import org.springframework.web.bind.annotation.*;\n";
 
-        return imports +
+        return "package " + packageName + ".RoutesPackage;\n\n" +
+                imports +
                 "\n@CrossOrigin(origins = \"http://localhost:5173\")\n" +
                 "@RestController\n" +
                 "public class " + className + " {\n\n" +

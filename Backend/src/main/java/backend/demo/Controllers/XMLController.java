@@ -93,11 +93,11 @@ public class XMLController {
         // GeneradorInterface GI = GeneradorInterface.getInstance();
         // GI.Generar(PXML.getTextInterface());
         // }
-        // if (PXML.getTextRoute().size() > 0) {
-        // GeneradorRoute GR = GeneradorRoute.getInstance();
-        // GR.setOutputDirectory("Backend/src/main/java/backend/demo/Logica/LogicGenerateRoute/");
-        // GR.Generar(PXML.getTextRoute());
-        // }
+        if (PXML.getTextRoute().size() > 0) {
+            GeneradorRoute GR = GeneradorRoute.getInstance();
+            GR.setOutputDirectory("Backend/src/main/java/backend/demo/Logica/LogicGenerateRoute/");
+            GR.Generar(PXML.getTextRoute(), estructura);
+        }
     }
 
     public void downloadZip(HttpServletResponse response) throws IOException {
